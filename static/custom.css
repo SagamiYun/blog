@@ -1,0 +1,108 @@
+/* =========================================================================
+   Kit Kyo — "Deep Space" theme
+   Inspired by FullWorldMap's Venus timeline video: black void, a single
+   glowing body, silver greyscale, cyan atmospheric rim-light, and a wide
+   metallic techno display face for the headings.
+   ========================================================================= */
+
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Barlow+Condensed:wght@300;400;500;600&family=Barlow:wght@300;400;500;600&display=swap');
+
+/* ---- palette + fonts (force the cosmic look) ---- */
+:root,
+[data-theme="dark"] {
+  --background-color: #06070d;
+  --bg-0: #06070d;
+  --bg-1: #0b0e17;
+  --bg-2: #11151f;
+  --bg-3: #181d2a;
+
+  --text-color: #c3c9d6;
+  --text: #c3c9d6;
+  --meta-color: #6c768c;
+  --divider-color: #1b2230;
+
+  --primary-color: #5fd6e6;     /* cyan atmospheric glow */
+  --hover-color: #a6eef6;
+
+  --codeblock-bg: #090c14;
+
+  --header-font: "Orbitron", "Barlow Condensed", sans-serif;
+  --sans-serif-font: "Barlow", system-ui, -apple-system, sans-serif;
+  --serif-font: "Barlow", system-ui, sans-serif;
+}
+
+/* ---- deep-space backdrop: nebula glow + faint starfield ---- */
+body {
+  background-color: #06070d;
+  background-image:
+    radial-gradient(ellipse 90% 55% at 50% -8%, rgba(46, 96, 128, 0.22), transparent 60%),
+    radial-gradient(1.2px 1.2px at 12% 22%, rgba(255,255,255,0.55), transparent),
+    radial-gradient(1.2px 1.2px at 68% 14%, rgba(255,255,255,0.40), transparent),
+    radial-gradient(1px 1px at 34% 68%, rgba(255,255,255,0.35), transparent),
+    radial-gradient(1px 1px at 82% 58%, rgba(255,255,255,0.45), transparent),
+    radial-gradient(1px 1px at 52% 88%, rgba(255,255,255,0.30), transparent),
+    radial-gradient(1px 1px at 92% 84%, rgba(255,255,255,0.35), transparent);
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+}
+
+/* ---- headings: wide techno display with cyan rim-glow ---- */
+h1, h2, h3, h4 {
+  font-family: var(--header-font);
+  letter-spacing: 0.03em;
+}
+h1, h2 {
+  text-shadow: 0 0 22px rgba(95, 214, 230, 0.22);
+}
+
+/* page / section title (the "FWM" logotype energy) */
+.title-container,
+.section-title,
+h1.title {
+  font-family: "Orbitron", sans-serif !important;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-shadow: 0 0 24px rgba(95, 214, 230, 0.30);
+}
+
+/* ---- nav + brand: condensed uppercase, HUD-label feel ---- */
+.nav-links,
+.nav-links a,
+.menu a,
+.nav-navs a {
+  font-family: "Barlow Condensed", sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 0.10em;
+  font-weight: 500;
+}
+
+/* site brand / home title in the header */
+header .home-title,
+header a[href$="/"]:first-of-type {
+  font-family: "Orbitron", sans-serif;
+  letter-spacing: 0.08em;
+}
+
+/* ---- links: cyan, glow on hover ---- */
+a { color: var(--primary-color); text-decoration-color: rgba(95,214,230,0.4); }
+a:hover { color: var(--hover-color); text-shadow: 0 0 10px rgba(95, 214, 230, 0.45); }
+
+/* ---- code: deep void ---- */
+pre, code, .z-code, .code-block {
+  background: var(--codeblock-bg) !important;
+}
+
+/* ---- dividers / rules: faint HUD line ---- */
+hr, .bottom-divider {
+  border-color: var(--divider-color) !important;
+}
+
+/* ---- tags: small caps chips ---- */
+.tags a, .tag {
+  font-family: "Barlow Condensed", sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+/* selection */
+::selection { background: rgba(95, 214, 230, 0.25); color: #eaf7fa; }

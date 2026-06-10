@@ -28,11 +28,13 @@ error_on_missing_language = false
 
 [extra]
 # --- tabi core ---
-theme_switcher = true
-default_theme = ""
+theme_switcher = false
+default_theme = "dark"
 skin = "teal"
-browser_theme_color = "#087e96"
-favicon_emoji = "🌊"
+browser_theme_color = "#06070d"
+favicon_emoji = "🪐"
+stylesheets = ["custom.css"]
+enable_csp = false
 
 # --- post options ---
 show_reading_time = true
