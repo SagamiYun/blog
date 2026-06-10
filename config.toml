@@ -1,0 +1,53 @@
+base_url = "https://sagamiyun.github.io/blog"
+title = "SagamiYun"
+description = "AI / ML research notes — MoE, world models, edge-efficient systems, open-ended evolution & agents. By 乔磊 · A2O Labs."
+author = "SagamiYun"
+default_language = "en"
+theme = "tabi"
+
+generate_feeds = true
+compile_sass = true
+minify_html = true
+build_search_index = true
+
+taxonomies = [{ name = "tags", feed = true }]
+
+[search]
+index_format = "elasticlunr_json"
+
+[markdown]
+bottom_footnotes = true
+smart_punctuation = true
+render_emoji = true
+external_links_class = "external"
+
+[markdown.highlighting]
+theme = "catppuccin-frappe"
+style = "class"
+error_on_missing_language = false
+
+[extra]
+# --- tabi core ---
+theme_switcher = true
+default_theme = ""
+skin = "teal"
+browser_theme_color = "#087e96"
+favicon_emoji = "🌊"
+
+# --- post options ---
+show_reading_time = true
+show_date = true
+toc = true
+copy_button = true
+quick_navigation_buttons = true
+show_previous_next_article_links = true
+
+# --- nav ---
+menu = [
+    { name = "blog", url = "blog", trailing_slash = true },
+    { name = "tags", url = "tags", trailing_slash = true },
+]
+
+socials = [
+    { name = "github", url = "https://github.com/SagamiYun", icon = "github" },
+]
