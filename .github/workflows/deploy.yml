@@ -30,7 +30,7 @@ jobs:
         with:
           tool: zola@0.22.1
       - name: Build with Zola
-        run: zola build --base-url "${{ steps.pages.outputs.base_url }}"
+        run: zola build
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:

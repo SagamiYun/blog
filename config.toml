@@ -1,4 +1,4 @@
-base_url = "https://sagamiyun.github.io/blog"
+base_url = "https://blog.sagamiyun.me"
 title = "SagamiYun"
 description = "AI / ML research notes — MoE, world models, edge-efficient systems, open-ended evolution & agents. By 乔磊 · A2O Labs."
 author = "SagamiYun"
