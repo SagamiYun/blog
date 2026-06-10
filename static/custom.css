@@ -35,15 +35,19 @@
 body {
   background-color: #06070d;
   background-image:
-    radial-gradient(ellipse 90% 55% at 50% -8%, rgba(46, 96, 128, 0.22), transparent 60%),
-    radial-gradient(1.2px 1.2px at 12% 22%, rgba(255,255,255,0.55), transparent),
-    radial-gradient(1.2px 1.2px at 68% 14%, rgba(255,255,255,0.40), transparent),
-    radial-gradient(1px 1px at 34% 68%, rgba(255,255,255,0.35), transparent),
-    radial-gradient(1px 1px at 82% 58%, rgba(255,255,255,0.45), transparent),
-    radial-gradient(1px 1px at 52% 88%, rgba(255,255,255,0.30), transparent),
-    radial-gradient(1px 1px at 92% 84%, rgba(255,255,255,0.35), transparent);
+    /* nebula glow (fixed, top-centre) */
+    radial-gradient(900px 520px at 50% -180px, rgba(46, 96, 128, 0.20), transparent 72%),
+    /* repeating starfield tile — consistent density at any width */
+    radial-gradient(1px 1px at 25px 35px, rgba(255,255,255,0.55), transparent),
+    radial-gradient(1px 1px at 90px 130px, rgba(255,255,255,0.40), transparent),
+    radial-gradient(1.6px 1.6px at 165px 60px, rgba(255,255,255,0.35), transparent),
+    radial-gradient(1px 1px at 210px 175px, rgba(255,255,255,0.45), transparent),
+    radial-gradient(1px 1px at 120px 225px, rgba(255,255,255,0.30), transparent),
+    radial-gradient(1px 1px at 55px 200px, rgba(255,255,255,0.22), transparent);
+  background-size: 100% 100%, 270px 270px, 270px 270px, 270px 270px, 270px 270px, 270px 270px, 270px 270px;
+  background-repeat: no-repeat, repeat, repeat, repeat, repeat, repeat, repeat;
   background-attachment: fixed;
-  background-repeat: no-repeat;
+  overflow-x: hidden;
 }
 
 /* ---- headings: wide techno display with cyan rim-glow ---- */
