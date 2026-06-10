@@ -32,12 +32,15 @@
 }
 
 /* ---- deep-space backdrop: nebula glow + faint starfield ---- */
-body {
+/* tabi constrains <body> to a centred max-width column, so the cosmic
+   backdrop must live on <html> (full viewport) — otherwise only the
+   centre column gets stars and the sides stay flat. */
+html {
   background-color: #06070d;
   background-image:
     /* nebula glow (fixed, top-centre) */
     radial-gradient(900px 520px at 50% -180px, rgba(46, 96, 128, 0.20), transparent 72%),
-    /* repeating starfield tile — consistent density at any width */
+    /* repeating starfield tile — consistent density across the whole viewport */
     radial-gradient(1px 1px at 25px 35px, rgba(255,255,255,0.55), transparent),
     radial-gradient(1px 1px at 90px 130px, rgba(255,255,255,0.40), transparent),
     radial-gradient(1.6px 1.6px at 165px 60px, rgba(255,255,255,0.35), transparent),
@@ -47,6 +50,10 @@ body {
   background-size: 100% 100%, 270px 270px, 270px 270px, 270px 270px, 270px 270px, 270px 270px, 270px 270px;
   background-repeat: no-repeat, repeat, repeat, repeat, repeat, repeat, repeat;
   background-attachment: fixed;
+}
+/* let the full-viewport html backdrop show through the centred body column */
+body {
+  background: transparent !important;
   overflow-x: hidden;
 }
 
