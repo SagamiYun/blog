@@ -1,7 +1,7 @@
 base_url = "https://blog.sagamiyun.me"
-title = "SagamiYun"
-description = "AI / ML research notes — MoE, world models, edge-efficient systems, open-ended evolution & agents. By 乔磊 · A2O Labs."
-author = "SagamiYun"
+title = "Kit Kyo"
+description = "Full-stack engineer · DevOps · agent development — currently going deep on ML & infrastructure."
+author = "Kit Kyo"
 default_language = "en"
 theme = "tabi"
 
@@ -45,6 +45,7 @@ show_previous_next_article_links = true
 # --- nav ---
 menu = [
     { name = "blog", url = "blog", trailing_slash = true },
+    { name = "about", url = "about", trailing_slash = true },
     { name = "tags", url = "tags", trailing_slash = true },
 ]
 
