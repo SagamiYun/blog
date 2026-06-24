@@ -1,7 +1,7 @@
 +++
 title = "Does a multi-agent panel beat a single LLM at evolutionary code search? (We tested it. No.)"
 date = 2026-06-25
-description = "We replaced the single-LLM mutation step of an AlphaEvolve-style evolve loop (OpenEvolve) with a proposer→critic→aggregator panel and tested it rigorously across three problems. It never won — equal on easy optimization, significantly worse on hard optimization (p=0.01), and on correctness-gated ARC it cracked nothing a single call couldn't. A clean negative result — plus the lossy-transport and "it's-not-rate-limited-it's-thinking" bugs we had to fix to trust it."
+description = "We replaced the single-LLM mutation step of an AlphaEvolve-style evolve loop (OpenEvolve) with a proposer→critic→aggregator panel and tested it rigorously across three problems. It never won — equal on easy optimization, significantly worse on hard optimization (p=0.01), and on correctness-gated ARC it cracked nothing a single call couldn't. A clean negative result — plus the lossy-transport and 'not rate-limited, just thinking' bugs we had to fix to trust it."
 authors = ["Kit Kyo · A2O Labs"]
 
 [taxonomies]
