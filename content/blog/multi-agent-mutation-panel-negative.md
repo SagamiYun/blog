@@ -55,16 +55,6 @@ single-LLM arm and no ablation. A nice curve proves the *mechanism runs* — it 
 about whether the panel *helped*. That correction is the whole post: *a working demo plus an
 honest caveat is not a tested claim — you need the control that isolates the variable.*
 
-Building that control also meant fixing two backend bugs first. The original "free" backend —
-scraping a coding-assistant TUI through a pseudo-terminal — was **lossy for code** and silently
-corrupted exactly the panel arm's larger prompts, so the panel *looked* catastrophically bad
-when the transport was the culprit; we switched to a faithful headless backend (byte-exact JSON)
-and the confound vanished. The other was a ~6-minute-per-mutation slowness that turned out to be
-reasoning latency, not a rate-limit — one flag fixed it. The lesson worth keeping: **a lossy
-"free" backend can quietly confound the very thing you're measuring — verify transport fidelity
-and run on a backend whose failures are loud, not silent.** Only after both was the comparison
-trustworthy.
-
 ## The clean A/Bs
 
 All numbers below are `combined_score` (higher = better), faithful backend, 8 repeats × 12
@@ -118,10 +108,7 @@ A single strong-model call is the better mutation operator here — and the chea
 1. **Build the baseline before you believe the demo.** A working mechanism plus an honest
    limitation note is not a tested claim. The control that isolates your variable is the
    experiment; everything else is a screenshot.
-2. **A lossy "free" backend can confound the very thing you're measuring.** The panel's
-   apparent catastrophic failure was a transport artifact, not a finding. Verify transport
-   fidelity, and run on a backend whose failures are *loud*, not silent.
-3. **Negative results are results.** The reusable parts — a faithful headless backend, a
+2. **Negative results are results.** The reusable parts — a faithful headless backend, a
    baseline/ablation harness, an ARC held-out-test scorer — outlived the hypothesis. The
    honest answer ("the obvious multi-agent upgrade doesn't help, and here's why") is worth
    more than another plausible-but-untested win.
