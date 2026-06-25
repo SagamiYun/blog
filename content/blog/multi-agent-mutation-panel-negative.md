@@ -1,7 +1,7 @@
 +++
 title = "Does a multi-agent panel beat a single LLM at evolutionary code search? (We tested it. No.)"
 date = 2026-06-25
-description = "We replaced the single-LLM mutation step of an AlphaEvolve-style evolve loop (OpenEvolve) with a proposer→critic→aggregator panel and tested it rigorously across three problems. It never won — equal on easy optimization, significantly worse on hard optimization (p=0.01), and on correctness-gated ARC it cracked nothing a single call couldn't. A clean negative result — plus the lossy-transport and 'not rate-limited, just thinking' bugs we had to fix to trust it."
+description = "We replaced the single-LLM mutation step of an AlphaEvolve-style evolve loop (OpenEvolve) with a proposer→critic→aggregator panel and tested it rigorously across three problems. It never won — equal on easy optimization, significantly worse on hard optimization (p=0.01), and on correctness-gated ARC it cracked nothing a single call couldn't. A clean negative result, with the baseline/ablation harness that makes it trustworthy."
 authors = ["Kit Kyo · A2O Labs"]
 
 [taxonomies]
@@ -55,41 +55,15 @@ single-LLM arm and no ablation. A nice curve proves the *mechanism runs* — it 
 about whether the panel *helped*. That correction is the whole post: *a working demo plus an
 honest caveat is not a tested claim — you need the control that isolates the variable.*
 
-Building that control surfaced two failures worth their own war stories.
-
-### War story 1 — a "free" transport that silently corrupts code
-
-To run on the subscription, the first backend scraped an interactive coding-assistant TUI
-through a pseudo-terminal. Great for prose; **lossy for code.** It stripped ```code-fence
-backticks, added a left margin to wrapped lines, mangled `<<<`/`>>>` diff markers, and — the
-nasty one — *ate paired markdown emphasis*: `__name__` rendered as `name`, silently breaking
-every `if __name__ == "__main__":`. Worst of all, under big prompts it sometimes returned its
-own wrapper-instruction text instead of the model's answer.
-
-This didn't just add noise — it **confounded the comparison**. The panel's prompts are the
-largest (proposer + critic context), so the panel arm hit the corruption hardest: in one run
-the panel "scored" 0 on every iteration while single looked fine. Read naively, that's
-"panel is terrible." It was actually "the transport breaks on long prompts." A confounded
-free backend is worse than no result.
-
-The fix was twofold: a per-line sentinel so the emitted code survives the TUI, plus — better —
-switching to a **faithful** headless mode that returns structured JSON (byte-exact code,
-dunders and all). With a faithful backend the sentinel hack became unnecessary; the model just
-emits a normal fenced block.
-
-### War story 2 — "rate-limited" was a lie; it was thinking
-
-The faithful backend was *slow* — ~6 minutes for a single mutation inside the evolve worker,
-vs ~10 seconds standalone. The easy explanation ("subscription rate-limit") was wrong. The
-call's own timing told the truth: API-time ≈ wall-time, no retries, **time-to-first-token ≈
-140 seconds.** It wasn't waiting on a quota — the model was *thinking* for 140s before the
-first token. The fix wasn't a quota dance; it was one flag: drop the reasoning effort to
-`low` → TTFT 140s → ~7s, with no loss of code quality. (A separate, real quota limit showed
-up later: a full three-arm run simply exhausts a subscription's window — the panel arm's 3×
-call volume is what blows it. A genuine deployability data point about subscription-backed
-evolve loops.)
-
-Only after both fixes was the comparison clean enough to believe.
+Building that control also meant fixing two backend bugs first. The original "free" backend —
+scraping a coding-assistant TUI through a pseudo-terminal — was **lossy for code** and silently
+corrupted exactly the panel arm's larger prompts, so the panel *looked* catastrophically bad
+when the transport was the culprit; we switched to a faithful headless backend (byte-exact JSON)
+and the confound vanished. The other was a ~6-minute-per-mutation slowness that turned out to be
+reasoning latency, not a rate-limit — one flag fixed it. The lesson worth keeping: **a lossy
+"free" backend can quietly confound the very thing you're measuring — verify transport fidelity
+and run on a backend whose failures are loud, not silent.** Only after both was the comparison
+trustworthy.
 
 ## The clean A/Bs
 
@@ -147,9 +121,7 @@ A single strong-model call is the better mutation operator here — and the chea
 2. **A lossy "free" backend can confound the very thing you're measuring.** The panel's
    apparent catastrophic failure was a transport artifact, not a finding. Verify transport
    fidelity, and run on a backend whose failures are *loud*, not silent.
-3. **Diagnose, don't guess.** "It's rate-limited" was wrong; the timing said "it's thinking."
-   One flag (`effort=low`) fixed a 6-minute call.
-4. **Negative results are results.** The reusable parts — a faithful headless backend, a
+3. **Negative results are results.** The reusable parts — a faithful headless backend, a
    baseline/ablation harness, an ARC held-out-test scorer — outlived the hypothesis. The
    honest answer ("the obvious multi-agent upgrade doesn't help, and here's why") is worth
    more than another plausible-but-untested win.
