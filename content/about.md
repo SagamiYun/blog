@@ -26,6 +26,6 @@ I build and ship across the whole stack — from product front-end and back-end,
 ### Elsewhere
 
 - **GitHub** — [github.com/SagamiYun](https://github.com/SagamiYun)
-- **X** — [@a2o_labs](https://x.com/a2o_labs)
+- **X** — [@Kit_KyoD](https://x.com/Kit_KyoD)
 
 *Always happy to talk shop — feel free to reach out.*
