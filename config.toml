@@ -53,4 +53,5 @@ menu = [
 
 socials = [
     { name = "github", url = "https://github.com/SagamiYun", icon = "github" },
+    { name = "twitter", url = "https://x.com/Kit_KyoD", icon = "twitter" },
 ]
