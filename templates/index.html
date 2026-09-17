@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}{{config.extra.title}}{% endblock title %}</title>
+  <meta name="description" content="{% block description %}{{config.extra.description}}{% endblock description %}">
+  <link rel="stylesheet" type="text/css" href="{{get_url(path="base.css")}}">
+  <link rel="icon" href="{{get_url(path="favicon.svg")}}">
+  {% block head %}{% endblock head %}
+</head>
+<body>
+  <div id="container">
+    <header><a href="{{config.base_url}}"><h1>{{config.extra.title}}</h1></a></header>
+    <nav>{{<toucan.nav current_path={current_path or ""} />}}</nav>
+    <main>{% block main %}{% endblock main %}</main>
+    <footer>{% include "footer.html" %}</footer>
+  </div>
+</body>
+</html>

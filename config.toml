@@ -23,7 +23,6 @@ error_on_missing_language = false
 
 [extra]
 title = "Kit Kyo"
-title_pic = "/favicon.svg"
 description = "Full-stack engineer · DevOps · agent development — currently going deep on ML & infrastructure."
 license = """Content under <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA</a> Licence"""
 
