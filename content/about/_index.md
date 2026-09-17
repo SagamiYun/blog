@@ -1,9 +1,9 @@
 +++
 title = "About"
-path = "about"
-[extra]
-show_date = false
-show_reading_time = false
+weight = 2
+template = "section.html"
+sort_by = "none"
+transparent = false
 +++
 
 ## Kit Kyo

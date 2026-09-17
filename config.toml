@@ -3,17 +3,13 @@ title = "Kit Kyo"
 description = "Full-stack engineer · DevOps · agent development — currently going deep on ML & infrastructure."
 author = "Kit Kyo"
 default_language = "en"
-theme = "tabi"
+theme = "toucan"
 
 generate_feeds = true
 compile_sass = true
 minify_html = true
-build_search_index = true
 
 taxonomies = [{ name = "tags", feed = true }]
-
-[search]
-index_format = "elasticlunr_json"
 
 [markdown]
 bottom_footnotes = true
@@ -23,35 +19,21 @@ external_links_class = "external"
 
 [markdown.highlighting]
 theme = "catppuccin-frappe"
-style = "class"
 error_on_missing_language = false
 
 [extra]
-# --- tabi core ---
-theme_switcher = false
-default_theme = "dark"
-skin = "teal"
-browser_theme_color = "#06070d"
-favicon_emoji = "🪐"
-stylesheets = ["custom.css"]
-enable_csp = false
+title = "Kit Kyo"
+title_pic = "/favicon.svg"
+description = "Full-stack engineer · DevOps · agent development — currently going deep on ML & infrastructure."
+license = """Content under <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA</a> Licence"""
 
-# --- post options ---
-show_reading_time = true
-show_date = true
-toc = true
-copy_button = true
-quick_navigation_buttons = true
-show_previous_next_article_links = true
+[extra.theme]
+read_more = "Read more →"
 
-# --- nav ---
-menu = [
-    { name = "blog", url = "blog", trailing_slash = true },
-    { name = "about", url = "about", trailing_slash = true },
-    { name = "tags", url = "tags", trailing_slash = true },
-]
+[[extra.socials]]
+name = "github"
+url = "https://github.com/SagamiYun"
 
-socials = [
-    { name = "github", url = "https://github.com/SagamiYun", icon = "github" },
-    { name = "twitter", url = "https://x.com/Kit_KyoD", icon = "twitter" },
-]
+[[extra.socials]]
+name = "twitter"
+url = "https://x.com/Kit_KyoD"
