@@ -188,14 +188,17 @@ p {
   padding: 8px 14px !important;
   text-shadow: 0 0 14px rgba(167, 139, 250, 0.35);
   box-shadow: 0 0 16px rgba(167, 139, 250, 0.08);
-  transition: all 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  transition: border-color 150ms ease, color 150ms ease, box-shadow 150ms ease, background-color 150ms ease !important;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
 }
 
-.header-logo:hover .logo {
+.header-logo:hover .logo,
+.header-logo:focus-visible .logo {
   border-color: var(--accent) !important;
   color: var(--accent) !important;
-  box-shadow: 0 0 24px rgba(167, 139, 250, 0.25);
-  transform: translateX(2px);
+  background-color: #121218 !important;
+  box-shadow: 0 0 24px rgba(167, 139, 250, 0.3) !important;
 }
 
 /* Taber Navigation */
@@ -234,31 +237,37 @@ p {
   border-radius: 6px;
   border: 1px solid transparent;
   background: transparent;
-  transition: all 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  transition: color 150ms ease, background-color 150ms ease, border-color 150ms ease, box-shadow 150ms ease !important;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
 }
 
 .nav-mark {
   color: var(--muted);
-  transition: color 150ms ease;
+  display: inline-block;
+  transition: color 150ms ease, transform 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: transform;
 }
 
-.nav-link:hover {
+.nav-link:hover,
+.nav-link:focus-visible {
   color: #ffffff !important;
-  background: rgba(167, 139, 250, 0.08);
-  border-color: rgba(167, 139, 250, 0.2);
-  text-shadow: 0 0 12px rgba(167, 139, 250, 0.45);
-  transform: translateY(-1px);
+  background: rgba(167, 139, 250, 0.08) !important;
+  border-color: rgba(167, 139, 250, 0.25) !important;
+  box-shadow: 0 0 12px rgba(167, 139, 250, 0.15) !important;
 }
 
-.nav-link:hover .nav-mark {
+.nav-link:hover .nav-mark,
+.nav-link:focus-visible .nav-mark {
   color: var(--accent);
+  transform: translateX(2px);
 }
 
 .nav-link.active {
   color: var(--accent) !important;
-  background: rgba(167, 139, 250, 0.12);
-  border-color: rgba(167, 139, 250, 0.3);
-  text-shadow: 0 0 10px rgba(167, 139, 250, 0.35);
+  background: rgba(167, 139, 250, 0.12) !important;
+  border-color: rgba(167, 139, 250, 0.3) !important;
+  box-shadow: 0 0 10px rgba(167, 139, 250, 0.2) !important;
 }
 
 .nav-link.active .nav-mark {
@@ -284,14 +293,18 @@ p {
   padding: 8px 12px;
   border-radius: 6px;
   cursor: pointer;
-  transition: all 150ms ease;
+  transition: color 150ms ease, border-color 150ms ease, background-color 150ms ease, box-shadow 150ms ease !important;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
 }
 
 .mobile-menu-toggle:hover,
+.mobile-menu-toggle:focus-visible,
 .mobile-menu-toggle.is-open {
   color: var(--accent);
   border-color: var(--accent);
-  box-shadow: 0 0 16px rgba(167, 139, 250, 0.2);
+  background: rgba(167, 139, 250, 0.08);
+  box-shadow: 0 0 16px rgba(167, 139, 250, 0.25);
 }
 
 /* === Mobile Navigation Responsive Rules === */
@@ -398,14 +411,16 @@ article.post {
   max-width: 100%;
   width: 100%;
   box-sizing: border-box;
-  transition: all 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  transition: border-color 150ms ease, box-shadow 150ms ease, background-color 150ms ease !important;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
 }
 
 .post:hover,
 article.post:hover {
-  border-color: var(--border-h);
-  box-shadow: 0 0 24px rgba(167, 139, 250, 0.08);
-  transform: translateY(-1px);
+  border-color: var(--border-h) !important;
+  background: #0f0f14 !important;
+  box-shadow: 0 0 28px rgba(167, 139, 250, 0.08) !important;
 }
 
 .post-title {
@@ -456,11 +471,13 @@ article.post:hover {
   background: var(--surface);
   color: var(--sec) !important;
   text-decoration: none;
+  transition: border-color 150ms ease, color 150ms ease, box-shadow 150ms ease;
 }
 
 .post-tags a:hover {
   border-color: var(--accent);
   color: var(--accent) !important;
+  box-shadow: 0 0 10px rgba(167, 139, 250, 0.25);
   text-shadow: 0 0 8px rgba(167, 139, 250, 0.4);
 }
 
@@ -472,12 +489,12 @@ article.post:hover {
   color: var(--accent) !important;
   text-decoration: none;
   margin-top: 12px;
-  transition: all 150ms ease;
+  transition: color 150ms ease, text-shadow 150ms ease;
 }
 
 .read-more:hover {
-  transform: translateX(4px);
-  text-shadow: 0 0 12px rgba(167, 139, 250, 0.5);
+  color: #ffffff !important;
+  text-shadow: 0 0 14px rgba(167, 139, 250, 0.6);
 }
 
 /* === Single Post Page === */
@@ -672,8 +689,10 @@ footer {
   border-radius: 6px !important;
   background: var(--card) !important;
   border: 1px solid var(--border) !important;
-  transition: all 150ms cubic-bezier(0.4, 0, 0.2, 1) !important;
+  transition: border-color 150ms ease, background-color 150ms ease, box-shadow 150ms ease !important;
   text-decoration: none !important;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
 }
 
 .social-link svg,
@@ -684,20 +703,39 @@ footer {
   max-height: 18px !important;
   aspect-ratio: 1/1 !important;
   fill: var(--sec) !important;
-  transition: all 150ms ease !important;
+  transition: fill 150ms ease, filter 150ms ease !important;
 }
 
-.social-link:hover {
+.social-link:hover,
+.social-link:focus-visible {
   border-color: var(--accent) !important;
   background: rgba(167, 139, 250, 0.12) !important;
-  box-shadow: 0 0 14px rgba(167, 139, 250, 0.3) !important;
-  transform: translateY(-2px);
+  box-shadow: 0 0 16px rgba(167, 139, 250, 0.35) !important;
 }
 
 .social-link:hover svg,
-.socials .social-link:hover svg {
+.socials .social-link:hover svg,
+.social-link:focus-visible svg {
   fill: var(--accent) !important;
   filter: drop-shadow(0 0 6px rgba(167, 139, 250, 0.6));
+}
+
+/* === Button & Focus Anti-Jitter === */
+button,
+.copy-button {
+  transition: color 150ms ease, background-color 150ms ease, border-color 150ms ease, box-shadow 150ms ease !important;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+button:focus-visible,
+a:focus-visible,
+.copy-button:focus-visible,
+.mobile-menu-toggle:focus-visible,
+.social-link:focus-visible {
+  outline: 1px solid var(--accent) !important;
+  outline-offset: 2px !important;
+  box-shadow: 0 0 10px rgba(167, 139, 250, 0.35) !important;
 }
 
 .copyright {
