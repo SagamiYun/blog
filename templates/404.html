@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block title %}404 Not Found | {{ config.title }}{% endblock title %}
+
+{% block main %}
+<article class="content" style="text-align: center; padding: 60px 0;">
+    <h1 style="font-size: 3rem; margin-bottom: 16px;">[404]</h1>
+    <p style="color: var(--sec); font-family: var(--mono); margin-bottom: 24px;">// NODE_NOT_FOUND :: The requested path does not exist in the consciousness stream.</p>
+    <a href="{{ get_url(path='/', lang=lang) }}" style="display: inline-block; padding: 8px 16px; border: 1px solid var(--accent); border-radius: 6px;">&lt; RETURN_HOME</a>
+</article>
+{% endblock main %}

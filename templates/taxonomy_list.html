@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block title %}Tags | {{ config.title }}{% endblock title %}
+
+{% block main %}
+<article class="content">
+    <h1 class="page-title">Tags</h1>
+    <div class="post-tags" style="margin-top: 24px;">
+        {% for term in terms %}
+        <span style="margin: 6px; display: inline-block;">
+            #<a href="{{ term.permalink | safe }}">{{ term.name }}</a>
+            <small style="color: var(--muted);">({{ term.pages | length }})</small>
+        </span>
+        {% endfor %}
+    </div>
+</article>
+{% endblock main %}

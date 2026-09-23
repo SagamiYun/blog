@@ -1,38 +1,58 @@
 base_url = "https://blog.sagamiyun.me"
-title = "Kit Kyo"
-description = "Full-stack engineer · DevOps · agent development — currently going deep on ML & infrastructure."
+title = "Kit Kyo // ΛΟΓΟΣ"
+description = "edge & on-prem AI infra · Tokyo"
 author = "Kit Kyo"
 default_language = "en"
-theme = "toucan"
 
 generate_feeds = true
 compile_sass = true
 minify_html = true
 
-taxonomies = [{ name = "tags", feed = true }]
+taxonomies = [
+    { name = "tags", feed = true },
+]
+
+build_search_index = false
 
 [markdown]
 bottom_footnotes = true
 smart_punctuation = true
-render_emoji = true
+render_emoji = false
 external_links_class = "external"
+github_alerts = true
 
 [markdown.highlighting]
-theme = "catppuccin-frappe"
-error_on_missing_language = false
+style = "inline"
+theme = "catppuccin-mocha"
 
 [extra]
-title = "Kit Kyo"
-description = "Full-stack engineer · DevOps · agent development — currently going deep on ML & infrastructure."
-license = """Content under <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA</a> Licence"""
+color_scheme = "oled-abyss"
+layout = "center"
+show_default_author = false
+feed_icon = true
+copy_button = true
+header_title = "[+] Kit Kyo // ΛΟΓΟΣ"
 
-[extra.theme]
-read_more = "Read more →"
+stylesheets = ["kenosis.css"]
 
-[[extra.socials]]
-name = "github"
-url = "https://github.com/SagamiYun"
+copyright = "© $YEAR Kit Kyo :: // κένωσις · sagamiyun"
 
-[[extra.socials]]
-name = "twitter"
-url = "https://x.com/Kit_KyoD"
+main_menu = [
+    { name = "> blog", url = "blog", trailing_slash = true },
+    { name = "> tags", url = "tags", trailing_slash = true },
+    { name = "> about", url = "about", trailing_slash = true },
+    { name = "> portal", url = "https://sagamiyun.me", new_tab = false },
+    { name = "> github", url = "https://github.com/SagamiYun", new_tab = true },
+]
+
+socials = [
+    { name = "github", url = "https://github.com/SagamiYun" },
+    { name = "x", url = "https://x.com/Kit_KyoD" },
+]
+
+[extra.content_security_policy]
+enable = false
+
+[extra.responsive_images]
+widths = [640, 784, 1280, 1920, 2560]
+fallback_width = 1280

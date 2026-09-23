@@ -1,7 +1,6 @@
 +++
 title = "Kit Kyo"
 sort_by = "date"
-template = "section.html"
 +++
 
 Hi, I'm **Kit Kyo** — a **full-stack engineer** who works across the whole stack: product code, **DevOps**, and **agent development** (building LLM-driven agents and the plumbing around them).

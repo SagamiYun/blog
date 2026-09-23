@@ -1,19 +1,21 @@
 {% extends "base.html" %}
 
+{% block title %}{{ section.title }} | {{ config.title }}{% endblock title %}
+
 {% block main %}
 {% if section.content %}
-<header class="content framed">
+<article class="content">
     {{ section.content | safe }}
-</header>
+</article>
 {% endif %}
 
 {% if paginator is defined %}
     {% set posts = paginator.pages %}
 {% else %}
-    {% set blog_sec = get_section(path="blog/_index.md", allow_missing=true) %}
-    {% set posts = section.pages | default(value=blog_sec.pages | default(value=[])) %}
+    {% set posts = section.pages %}
 {% endif %}
 
+{% if posts %}
 <div class="posts">
 {% for page in posts %}
 <article class="post">
@@ -55,4 +57,5 @@
 </div>
 
 {% include "partials/pagination.html" %}
+{% endif %}
 {% endblock main %}

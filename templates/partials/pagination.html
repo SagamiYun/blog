@@ -1,0 +1,17 @@
+{%- if paginator is defined and paginator.number_pagers > 1 %}
+<nav class="pagination" aria-label="Pagination Navigation">
+    <ul>
+        {%- if paginator.previous %}
+        <li class="pagination-previous">
+            <a href="{{ paginator.previous | safe }}">&lt;&nbsp;newer</a>
+        </li>
+        {%- endif %}
+        <li><span class="pagination-current">{{ paginator.current_index }}/{{ paginator.number_pagers }}</span></li>
+        {%- if paginator.next %}
+        <li class="pagination-next">
+            <a href="{{ paginator.next | safe }}">older&nbsp;&gt;</a>
+        </li>
+        {%- endif %}
+    </ul>
+</nav>
+{%- endif %}

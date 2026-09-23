@@ -1,0 +1,328 @@
+/**
+ * Kenosis Aesthetic Theme Filter for Terminus / Zola
+ * Inspired by Project Kenosis (https://github.com/SagamiYun/Kenosis)
+ * and SagamiYun index portal (https://sagamiyun.me)
+ */
+
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+
+:root {
+  --bg: #050505;
+  --card: #0d0d0d;
+  --surface: #141414;
+  --border: #222222;
+  --border-h: #444444;
+  --txt: #f0f0f0;
+  --sec: #888888;
+  --muted: #555555;
+  --accent: #a78bfa;
+  --mono: 'JetBrains Mono', 'Fira Code', 'Courier New', monospace;
+  --disp: 'Space Grotesk', 'Inter', sans-serif;
+
+  /* Overrides for Terminus CSS variables */
+  --background-color: #050505 !important;
+  --text-color: #f0f0f0 !important;
+  --accent-color: #a78bfa !important;
+  --footnote-color: #888888 !important;
+}
+
+/* === Ambient Atmosphere & Overlays === */
+
+/* CRT Scanlines Overlay */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1000;
+  background: repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.05) 0 2px, transparent 2px 4px);
+  mix-blend-mode: overlay;
+}
+
+/* Top Subtle Violet Radial Glow */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: -1;
+  background: radial-gradient(ellipse at 50% 0%, rgba(167, 139, 250, 0.08), transparent 60%);
+}
+
+/* === Global Typography & Layout === */
+html, body {
+  background-color: var(--bg) !important;
+  color: var(--txt) !important;
+  font-family: var(--mono) !important;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body.layout-center,
+body.layout-left,
+body.layout-full-width {
+  background: var(--bg) !important;
+  color: var(--txt) !important;
+}
+
+/* Headings with Space Grotesk futuristic display */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--disp) !important;
+  color: #ffffff !important;
+  letter-spacing: -0.01em;
+}
+
+h1 {
+  font-weight: 700;
+  text-shadow: 0 0 24px rgba(255, 255, 255, 0.08);
+}
+
+/* === Selection & Scrollbar === */
+::selection {
+  background: rgba(167, 139, 250, 0.25);
+  color: #ffffff;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--border-h);
+}
+
+/* === Header & Navigation === */
+.header-logo-container {
+  align-items: center;
+}
+
+.logo {
+  font-family: var(--mono) !important;
+  font-size: 0.95rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  background: var(--card) !important;
+  color: var(--accent) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: 6px !important;
+  padding: 6px 14px !important;
+  text-shadow: 0 0 14px rgba(167, 139, 250, 0.4);
+  box-shadow: 0 0 16px rgba(167, 139, 250, 0.1);
+  transition: all 150ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.logo:hover {
+  border-color: var(--border-h) !important;
+  box-shadow: 0 0 24px rgba(167, 139, 250, 0.25);
+  transform: translateX(2px);
+}
+
+.header-logo-container::after {
+  background: repeating-linear-gradient(to right, var(--border), var(--border) 3px, transparent 0, transparent 9px) !important;
+  opacity: 0.7;
+}
+
+.main-menu-items {
+  background: var(--card) !important;
+  border: 1px solid var(--border);
+}
+
+.main-menu-items a {
+  font-family: var(--mono) !important;
+  font-size: 0.82rem;
+  letter-spacing: 0.06em;
+  color: var(--sec) !important;
+  transition: all 150ms ease;
+}
+
+.main-menu-items a:hover {
+  color: var(--accent) !important;
+  text-shadow: 0 0 12px rgba(167, 139, 250, 0.4);
+}
+
+/* === Links === */
+a {
+  color: var(--accent) !important;
+  transition: all 150ms ease;
+}
+
+a:hover {
+  color: #ffffff !important;
+  text-shadow: 0 0 14px rgba(167, 139, 250, 0.45);
+}
+
+/* === Post Cards & Excerpts (Kenosis card vibe) === */
+.post,
+article.post {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 24px 28px;
+  margin: 28px 0;
+  transition: all 150ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.post:hover,
+article.post:hover {
+  border-color: var(--border-h);
+  box-shadow: 0 0 24px rgba(167, 139, 250, 0.10);
+  transform: translateX(2px);
+}
+
+.post-title {
+  font-family: var(--disp) !important;
+  font-weight: 700;
+  font-size: 1.4rem;
+  margin-top: 0;
+  margin-bottom: 8px;
+}
+
+.post-title a {
+  color: #ffffff !important;
+  text-decoration: none;
+}
+
+.post-title a:hover {
+  color: var(--accent) !important;
+  text-shadow: 0 0 16px rgba(167, 139, 250, 0.4);
+}
+
+.post-meta {
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  color: var(--muted);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.post-tags a {
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 2px 8px;
+  font-size: 0.75rem;
+  background: var(--surface);
+  color: var(--sec) !important;
+  text-decoration: none;
+}
+
+.post-tags a:hover {
+  border-color: var(--accent);
+  color: var(--accent) !important;
+}
+
+/* === Code Blocks & Pre === */
+pre {
+  background: #08080c !important;
+  border: 1px solid var(--border) !important;
+  border-radius: 6px;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.5);
+}
+
+code:not(pre code) {
+  font-family: var(--mono) !important;
+  background: rgba(167, 139, 250, 0.1) !important;
+  color: var(--accent) !important;
+  border: 1px solid rgba(167, 139, 250, 0.2);
+  padding: 1px 5px;
+  border-radius: 4px;
+}
+
+/* === Blockquote === */
+blockquote {
+  border-inline-start: 3px solid var(--accent) !important;
+  background: rgba(167, 139, 250, 0.04);
+  padding: 12px 20px;
+  border-radius: 0 6px 6px 0;
+  color: var(--sec);
+}
+
+/* === Framed Intro Panel === */
+.framed {
+  background: var(--card);
+  border: 1px solid var(--border) !important;
+  border-left: 3px solid var(--accent) !important;
+  border-radius: 8px;
+  padding: 22px 26px;
+  margin: 28px 0 36px 0;
+  box-shadow: 0 0 20px rgba(167, 139, 250, 0.04);
+}
+
+.read-more {
+  display: inline-block;
+  font-family: var(--mono);
+  font-size: 0.82rem;
+  letter-spacing: 0.06em;
+  color: var(--accent) !important;
+  text-decoration: none;
+  margin-top: 12px;
+  transition: all 150ms ease;
+}
+
+.read-more:hover {
+  transform: translateX(4px);
+  text-shadow: 0 0 12px rgba(167, 139, 250, 0.5);
+}
+
+/* === Post Navigation (Prev / Next) === */
+.post-navigation {
+  margin-top: 48px;
+  padding-top: 24px;
+  border-top: 1px solid var(--border);
+}
+
+.post-navigation-buttons {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  font-family: var(--mono);
+  font-size: 0.82rem;
+  gap: 16px;
+}
+
+.post-navigation-buttons a {
+  color: var(--sec) !important;
+  text-decoration: none;
+}
+
+.post-navigation-buttons a:hover {
+  color: var(--accent) !important;
+  text-shadow: 0 0 12px rgba(167, 139, 250, 0.4);
+}
+
+/* === Footer === */
+.footer,
+footer {
+  border-top: 1px solid var(--border) !important;
+  margin-top: 56px;
+  padding-top: 24px;
+}
+
+.copyright {
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--muted) !important;
+}
+
+.socials {
+  margin-bottom: 14px;
+}
+
+.social-link svg {
+  fill: var(--sec);
+  transition: fill 150ms ease;
+}
+
+.social-link:hover svg {
+  fill: var(--accent);
+  filter: drop-shadow(0 0 8px rgba(167, 139, 250, 0.6));
+}

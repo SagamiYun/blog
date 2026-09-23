@@ -1,0 +1,8 @@
+<div class="header-container">
+    <span class="header-logo-container">
+        {% include "partials/logo.html" %}
+    </span>
+</div>
+{% if config.extra.main_menu -%}
+{% include "partials/menu.html" %}
+{%- endif %}

@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block title %}{{ page.title }} | {{ config.title }}{% endblock title %}
+
+{% block og_title %}{{ page.title }}{% endblock og_title %}
+
+{% block main %}
+<article class="post content">
+    <header>
+        <h1 class="post-title">{{ page.title }}</h1>
+        <ul class="post-meta">
+            {% if page.draft %}
+            <li class="draft-label">DRAFT</li>
+            {% endif %}
+            <li title="Published on {{ page.date | date(format="%F") }}">
+                <time datetime="{{ page.date }}">{{ page.date | date(format="%Y.%m.%d") }}</time>
+            </li>
+            {% if page.reading_time %}
+            <li role="separator" aria-hidden="true">::</li>
+            <li>{{ page.reading_time }} min read</li>
+            {% endif %}
+        </ul>
+        {% if page.taxonomies and page.taxonomies.tags %}
+        <div class="post-tags">
+            {% for tag in page.taxonomies.tags %}
+            {% set tag_url = get_taxonomy_url(kind="tags", name=tag, lang=lang) %}
+            <span>#<a href="{{ tag_url | safe }}">{{ tag }}</a></span>
+            {% endfor %}
+        </div>
+        {% endif %}
+    </header>
+
+    <div class="post-body">
+        {{ page.content | safe }}
+    </div>
+
+    {% if page.lower or page.higher %}
+    <nav class="post-navigation">
+        <div class="post-navigation-buttons">
+            {% if page.lower %}
+            <a rel="next" href="{{ page.lower.permalink | safe }}" aria-label="Next article">
+                &lt;&nbsp;[{{ page.lower.title | truncate(length=60) }}]
+            </a>
+            {% endif %}
+            {% if page.lower and page.higher %}
+            <span aria-hidden="true" role="separator">::</span>
+            {% endif %}
+            {% if page.higher %}
+            <a rel="prev" href="{{ page.higher.permalink | safe }}" aria-label="Prev article">
+                [{{ page.higher.title | truncate(length=60) }}]&nbsp;&gt;
+            </a>
+            {% endif %}
+        </div>
+    </nav>
+    {% endif %}
+</article>
+{% endblock main %}
