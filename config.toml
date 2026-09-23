@@ -38,11 +38,11 @@ stylesheets = ["kenosis.css"]
 copyright = "© $YEAR Kit Kyo :: // κένωσις · sagamiyun"
 
 main_menu = [
-    { name = "> blog", url = "blog", trailing_slash = true },
-    { name = "> tags", url = "tags", trailing_slash = true },
-    { name = "> about", url = "about", trailing_slash = true },
-    { name = "> portal", url = "https://sagamiyun.me", new_tab = false },
-    { name = "> github", url = "https://github.com/SagamiYun", new_tab = true },
+    { name = "blog", url = "blog", trailing_slash = true },
+    { name = "tags", url = "tags", trailing_slash = true },
+    { name = "about", url = "about", trailing_slash = true },
+    { name = "portal", url = "https://sagamiyun.me", new_tab = false },
+    { name = "github", url = "https://github.com/SagamiYun", new_tab = true },
 ]
 
 socials = [

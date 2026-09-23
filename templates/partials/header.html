@@ -1,8 +1,37 @@
-<div class="header-container">
-    <span class="header-logo-container">
-        {% include "partials/logo.html" %}
-    </span>
-</div>
-{% if config.extra.main_menu -%}
-{% include "partials/menu.html" %}
-{%- endif %}
+<header class="site-header">
+    <div class="header-main">
+        <a class="header-logo" href="{{ get_url(path='/', lang=lang) }}">
+            <span class="logo">{{ config.extra.header_title | default(value=config.title) | safe }}</span>
+        </a>
+
+        {% if config.extra.main_menu -%}
+        <button class="mobile-menu-toggle" id="mobile-menu-toggle" aria-label="Toggle navigation menu" aria-expanded="false">
+            <span class="toggle-text">[ // MENU ]</span>
+        </button>
+
+        <nav class="main-nav" id="main-nav" aria-label="Site Navigation">
+            <ul class="nav-list">
+                {%- for item in config.extra.main_menu -%}
+                {%- if item.url is starting_with(pat="http") -%}
+                    {%- set url = item.url -%}
+                {%- else -%}
+                    {%- set trailing_slash = item.trailing_slash | default(value=false) -%}
+                    {%- set url = get_url(path=item.url, trailing_slash=trailing_slash) -%}
+                {%- endif -%}
+                {%- set is_active = false -%}
+                {%- if current_path and item.url != "/" and current_path is starting_with(pat="/" ~ item.url) -%}
+                    {%- set is_active = true -%}
+                {%- endif -%}
+                <li class="nav-item">
+                    <a class="nav-link{% if is_active %} active{% endif %}" href="{{ url | safe }}" {%- if item.new_tab %} target="_blank" rel="noopener noreferrer" {%- endif -%}>
+                        <span class="nav-mark">&gt;</span>
+                        <span class="nav-label">{{ item.name }}</span>
+                    </a>
+                </li>
+                {%- endfor -%}
+            </ul>
+        </nav>
+        {%- endif %}
+    </div>
+    <div class="header-divider" aria-hidden="true"></div>
+</header>
