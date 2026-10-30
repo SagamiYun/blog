@@ -759,6 +759,24 @@ a:focus-visible,
   margin: 0 6px;
 }
 
+/* === KaTeX Math Rendering === */
+.katex {
+  font-size: 1.08em;
+  color: inherit;
+}
+
+.katex-display {
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 6px 0;
+  margin: 1.2em 0;
+}
+
+.paper-abstract p {
+  margin: 1em 0;
+  line-height: 1.75;
+}
+
 /* === Mobile Adjustments === */
 @media (max-width: 684px) {
   .post, article.post {

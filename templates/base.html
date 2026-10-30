@@ -13,6 +13,7 @@
 
     <!-- Stylesheets -->
     <link rel="stylesheet" href="{{ get_url(path="style.css", cachebust=true) }}">
+    <link rel="stylesheet" href="{{ get_url(path="katex.min.css", cachebust=true) }}">
     {%- for stylesheet in config.extra.stylesheets | default(value=[]) %}
     <link rel="stylesheet" href="{{ get_url(path=stylesheet, cachebust=true) }}">
     {%- endfor %}
@@ -22,6 +23,7 @@
 
     <!-- Scripts -->
     <script src="{{ get_url(path="js/mobile-nav.js", cachebust=true) }}" defer></script>
+    <script src="{{ get_url(path="js/katex.min.js", cachebust=true) }}" defer></script>
     {%- if config.extra.copy_button %}
     <script src="{{ get_url(path="js/copy-code-to-clipboard.js", cachebust=true) }}" defer></script>
     {%- endif %}

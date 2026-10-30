@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block title %}{{ section.title }} | {{ config.title }}{% endblock title %}
+
+{% block main %}
+{% if section.content %}
+<article class="content">
+    {{ section.content | safe }}
+</article>
+{% endif %}
+
+{% if section.extra.papers %}
+<div class="posts papers">
+{% for paper in section.extra.papers %}
+<article class="post paper-item">
+    <header>
+        <h2 class="post-title">
+            <a href="{{ paper.url | safe }}" target="_blank" rel="noopener noreferrer">{{ paper.title | safe }}</a>
+        </h2>
+    </header>
+
+    <div class="paper-abstract">
+        {% for para in paper.summary | split(pat="\n\n") %}
+        <p>{{ para | trim | safe }}</p>
+        {% endfor %}
+    </div>
+
+    <a class="read-more" href="{{ paper.url | safe }}" target="_blank" rel="noopener noreferrer">{{ paper.url }} →</a>
+</article>
+{% endfor %}
+</div>
+{% endif %}
+{% endblock main %}

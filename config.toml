@@ -39,6 +39,7 @@ copyright = "© $YEAR Kit Kyo :: // κένωσις · sagamiyun"
 
 main_menu = [
     { name = "blog", url = "blog", trailing_slash = true },
+    { name = "paper", url = "paper", trailing_slash = true },
     { name = "tags", url = "tags", trailing_slash = true },
     { name = "about", url = "about", trailing_slash = true },
     { name = "portal", url = "https://sagamiyun.me", new_tab = false },
