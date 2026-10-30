@@ -1,5 +1,5 @@
 +++
-title = "Blog"
+title = "Article"
 weight = 1
 sort_by = "date"
 transparent = true
