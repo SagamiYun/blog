@@ -23,7 +23,7 @@ $header-border-thickness: 1px;
     }
 }
 
-pre.giallo:not(:has(code[data-lang="plain"])) {
+pre.giallo {
     display: block;
     position: relative;
     padding: 0;
@@ -39,8 +39,12 @@ pre.giallo:not(:has(code[data-lang="plain"])) {
         overflow-x: auto;
         overscroll-behavior-x: none;
 
+        &[data-lang="plain"] {
+            padding-top: 10px;
+        }
+
         // Language header bar, driven by the data-lang attribute on <code>.
-        &::before {
+        &:not([data-lang="plain"])::before {
             content: attr(data-lang);
             position: sticky;
             inset-inline-start: 0;
