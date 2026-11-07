@@ -1,6 +1,6 @@
 +++
 title = "Weight-space surgery, demystified"
-description = "An LLM agent's weight edit took Qwen3.5-0.8B from 7.9% to 48.1% on MATH-500. The public logs show the gain sits almost entirely in answers that used to run out of tokens. Our own rank-one cut on TinyLlama-1.1B moved the hidden states, but under greedy decoding it did not change one generated token on the prompts it was built for."
+description = "An LLM agent's weight edit took Qwen3.5-0.8B from 7.9% to 48.1% on MATH-500. The public logs show the gain sits almost entirely in answers that used to run out of tokens. Our own rank-one cuts on TinyLlama-1.1B and Huginn-0125 (3.5B recurrent depth) moved the hidden states, did not change greedy rollouts, and did not compound across 32 recurrent steps."
 date = 2026-11-07
 authors = ["Kit Kyo · A2O Labs"]
 
@@ -17,7 +17,7 @@ Within a day people were [predicting models that edit each other's weights witho
 
 The nice thing about this one is that the logs are public. The [log repo](https://github.com/RikiyaT/lm_understand-logs) has 1,125 agent turns across eight experiments, the eval JSONs, per-problem tables and the edit itself. The [edited checkpoint](https://huggingface.co/RikiyaT/Qwen3.5-0.8B-weight-space-programming) is on Hugging Face. So nobody has to argue about the headline. You can open the files and look.
 
-We did that. Then we tried a cut of the same kind on TinyLlama-1.1B and watched the generated text instead of a score. Short version: almost all of the 6x comes from answers that used to run out of tokens. Our own rank-one cut moved the hidden states, and under greedy decoding it did not change one generated token on the prompts it was built for. Neither did 23 variations on it, up to six times the strength and seven layers at once.
+We did that. Then we tried a cut of the same kind on TinyLlama-1.1B and watched the generated text instead of a score, and followed it onto Huginn-0125, a 3.5B recurrent-depth model that loops its shared core block up to 32 times per token. Short version: almost all of the 6x on Qwen comes from answers that used to run out of tokens. On TinyLlama, our rank-one cut moved the hidden states, and under greedy decoding it did not change one generated token on the prompts it was built for; neither did 23 variations on it, up to six times the strength and seven layers at once. On Huginn-0125, running the shared core for 32 recurrent steps instead of 4 did not compound the cut either: the edit strength needed to flip a greedy token went up by 0.5 log2 units instead of dropping by the predicted 1.2592, and in the exact zero-strength tangent limit (`forward_ad` JVP) the core block's relative hidden-state perturbation shrank by 0.2932, 0.2181 and 0.3709 log2 units at steps 8, 16 and 32 relative to step 4.
 
 ## What the 7.9% measures
 
@@ -107,6 +107,72 @@ We wrote the selection rule down before generating anything. An edit qualifies i
 
 So we cut one direction out of TinyLlama, then tried 23 other versions of the cut, and under greedy decoding the loops did not stop. What the cuts did change was the control continuations. Their edit on Qwen did change generations, as the drop from 95.8% to 40.2% shows. The difference worth chasing is between a model that loops in its own decoding regime and prompts we built to loop.
 
+## We tried a model that loops its own weights: Huginn-0125
+
+In a dense transformer like TinyLlama, a weight edit at layer 15 touches the residual stream once per generated token. What happens when the architecture applies the same weight block `r` times in a recurrent loop before emitting each token?
+
+We tested that on [tomg-group-umd/huginn-0125](https://huggingface.co/tomg-group-umd/huginn-0125), a 3.5B-parameter recurrent-depth language model (`bfloat16`, hidden size 5,280, MLP intermediate size 17,920). Huginn splits its weights into three stages: a 2-layer `prelude` that embeds the input tokens into `e = P(x)`, a 4-layer recurrent `core_block` that updates the latent state `r` times via `s_t = R(e, s_{t-1})`, and a 2-layer `coda` that runs once after the `r` iterations to project `s_r` to logits.
+
+First we checked whether the unedited Huginn checkpoint hits the token cap on math problems without synthetic loop prompts, and whether a unit-strength rank-one cut rescues those runs. On 25 GSM8K and 25 SVAMP development problems (`r = 16`, greedy decoding, `test_time_noise = 0`, token caps 192 and 128), the unedited model hit the cap on 12 of 25 GSM8K problems (48%) and 9 of 25 SVAMP problems (36%), while scoring 6 of 13 (46.15%) and 7 of 16 (43.75%) strict accuracy on the answers that finished. We extracted a unit direction `u` (`v_loop_huginn.pt`, top right singular vector from 16 loop prompts against 16 controls) and projected it out of `core_block.0.mlp.proj.weight` at unit strength (`alpha = 1`). Truncated problems went from 12 to 10 on GSM8K (binomial `p = 0.25`) and stayed at 9 of 25 on SVAMP. That closed the accuracy-rescue question on development data.
+
+Even when a unit cut does not rescue full rollouts, the recurrent core sets up a clean dynamical question. Editing `mlp.proj.weight` by strength `alpha`:
+
+```
+W(alpha) = bfloat16(W0 - alpha * outer(u, u @ W0))
+```
+
+injects a fresh kick into the latent state at every recurrent step. If each step of the recurrent loop contracts perturbations along the active subspace by a single-step ratio `mu` between 0 and 1, then running the loop for `r` steps instead of 4 should compound the perturbation by the geometric sum `sum_{k=0}^{r-1} mu^k`.
+
+Before touching the 48 blind test problems (24 GSM8K and 24 SVAMP, indices 25 and up, seeds `3000..3047`), we measured `mu` on the 50 unedited calibration trajectories (`alpha = 0, r = 32`) from the step-to-step relative residual `||s_{t+1} - s_t|| / ||s_t||` across steps 4 to 31 above the `bfloat16` floor `2^-7`. Across all 50 calibration problems (zero tokens dropped), the median single-step contraction ratio was `0.8758` (IQR `0.8740` to `0.8773`). Plugging `mu = 0.8758` into the geometric sum:
+
+```
+F(r) = -log2( sum_{k=0}^{r-1} mu^k / sum_{k=0}^{3} mu^k )
+```
+
+gave pre-registered forecasts at `r = 8, 16, 32` relative to `r = 4`:
+
+- The critical edit strength `alpha*(r)` needed to flip at least one of the first 32 greedy tokens should drop by `-0.6674`, `-1.0961` and `-1.2592` log2 units;
+- The relative hidden-state perturbation gain from step 4 to step `r` should rise by `+0.6674`, `+1.0961` and `+1.2592` log2 units (or `+1.0, +2.0, +3.0` under an undamped `mu = 1` linear sum).
+
+One detail in Huginn's forward pass (`raven_modeling_minimal.py`, lines 696–774) matters for picking a control layer. Inside `core_block_forward`, every recurrent step runs `x = self.transformer.adapter(torch.cat([x, input_embeds], dim=-1))`. So `prelude` is not a pure step-0 input; `adapter` re-injects `e = P(x)` at all `r` steps. The stage that genuinely runs once per token after the loop finishes is `coda`. We locked `coda.0.mlp.proj.weight` as the single-pass control arm (predicting a `coda - core` threshold separation of `+1.2592` log2 units at `r = 32`) and tracked `prelude.0.mlp.proj.weight` alongside it.
+
+We ran the 7 blind GPU plans on a single RX 7800 XT (4,085 rows across the 48 blind problems, 4.80 GPU hours, PyTorch allocator peak 9.442 GiB within a 10 GiB cap; `rocm-smi` process peak 10.500 GiB). For each placement and problem, an 8-rung coarse ladder in `log2(alpha)` followed by a half-step refinement pinpointed the first-token-flip threshold `log2 alpha*(r)` to `0.5` log2 resolution. Every pre-registered band failed:
+
+| Readout on the 48 blind problems (`r` vs. `r = 4`, in log2 units) | `r = 8` | `r = 16` | `r = 32` | Pre-registered forecast (`r = 32`) |
+|---|---|---|---|---|
+| `core_block.0` flip-threshold shift | `0.0000` | `+1.0000` | `+0.5000` | `-1.2592` (band `+-0.50`) |
+| `coda.0 - core_block.0` threshold separation | `+0.7500` | `0.0000` | `+0.2500` | `+1.2592` (gate `> +0.6296`) |
+| `prelude.0` flip-threshold shift | `0.0000` | `+1.0000` | `+1.5000` | `<= -0.6296` |
+| `core_block.0` state gain at finite `alpha_0 = 0.25` | `+0.0914` | `+0.1237` | `+0.0429` | `+1.2592` (band `+-0.25`) |
+| `prelude.0` state gain at finite `alpha_0 = 0.25` | `+0.2024` | `+0.2293` | `+0.1793` | `>= +0.6296` |
+| `core_block.0` tangent gain in `alpha -> 0` JVP limit | `-0.2932` | `-0.2181` | `-0.3709` | `+1.2592` (band `+-0.25`) |
+| `prelude.0` tangent gain in `alpha -> 0` JVP limit | `+0.2997` | `+0.3938` | `+0.5198` | `>= +0.6296` |
+
+Instead of dropping by `1.2592` log2 units between `r = 4` and `r = 32`, the paired median flip threshold on `core_block.0` went up by `+0.5` log2 units (adjacent doubling medians `0.0`, `0.0` and `-0.25`; raw median `log2 alpha*` moved from `1.0` at `r = 4, 8` to `2.0` at `r = 16, 32`, with zero censored cells and a paired IQR of `3.5` across the 48 problems). Thresholds rose on the other two stages too: `+1.0` on `coda.0` (median `log2 alpha*` from `4.0` to `4.75`) and `+1.5` on `prelude.0` (`4.0` to `5.5`), leaving the `coda - core` separation at `0.25`. Part of why token flips get harder at deeper recurrence shows up in the unedited runs: the median minimum logit margin across the 32 generated tokens widens from `0.0625` at `r = 4` to `0.125` at `r = 8, 16, 32`.
+
+Logit margins do not explain the hidden-state row, because the state readout measures `s_t` on the last prompt token before `coda` or the output head runs. At `alpha_0 = 0.25`, the relative perturbation on `core_block.0` from step 4 to steps 8, 16 and 32 moved by only `+0.0914`, `+0.1237` and `+0.0429` log2 units, missing the `+1.2592` forecast by `1.2163` log2 units (it beat the `+3.0` undamped linear sum only because `+0.0429` sits closer to `1.2592` than to `3.0`).
+
+That left one escape hatch. Our linearity check compared the normalized step-32 state perturbation at `alpha_0 = 0.5` against `alpha_0 = 0.25`: the median absolute gap was `0.6562` log2 units, well past the `0.25` linearity tolerance and above the `0.5` breakdown line. So `alpha_0 = 0.25` was already outside the linear regime.
+
+Why not re-run weight subtraction at `alpha_0 = 0.125`, `0.0625` or `0.03125`? Because the checkpoint is stored in `bfloat16`, and subtracting `alpha_0 * outer(u, u @ W0)` hits the floating-point rounding floor before it reaches the linear regime. Checking the tensor subtraction on `core_block.0.mlp.proj.weight` directly shows where the cut disappears:
+
+| Finite edit strength `alpha_0` | Applied fraction (`att`) | Off-direction rounding residual (`resid`) | Share of weight entries changed | Passes pre-check (`att >= 0.96`, `resid <= 0.43`) |
+|---|---|---|---|---|
+| `0.5000` | `0.9974` | `0.1542` | `0.6517` | Yes |
+| `0.2500` | `0.9833` | `0.2759` | `0.4976` | Yes |
+| `0.1250` | `0.9211` | `0.4420` | `0.3360` | No |
+| `0.0625` | `0.7575` | `0.5900` | `0.2001` | No |
+| `0.03125` | `0.5171` | `0.6274` | `0.1083` | No |
+| `0.015625` | `0.3015` | `0.5520` | `0.0557` | No |
+
+At `alpha_0 <= 0.125`, more than two thirds of the matrix entries round straight back to their unedited `bfloat16` value, and the step-to-step attenuation drift between adjacent `alpha_0` rungs (`0.2821` log2 units from `0.125` to `0.0625`, and `0.5507` from `0.0625` to `0.03125`) blows past the `0.25` linearity band before the network even runs. (On the flip-threshold ladder, the lowest rung on `core` had an off-direction rounding ratio of `0.3556`, dropping to `0.0812` at `alpha = 1` and `<= 0.0574` from `alpha = 2` up, so the median flip thresholds at `log2 alpha*` between `1.0` and `2.0` sit in the clean range; by contrast, finite-`alpha_0` state gains on `prelude.0` at `alpha_0 = 0.25` and `0.5` were `2^3.7` to `2^5.0` times larger than linear predictions and mostly read `bfloat16` rounding noise.)
+
+To measure the exact `alpha -> 0` linear response without weight-subtraction rounding and without exceeding the 10 GiB VRAM budget on an `fp32` model copy, we ran a follow-up test using forward-mode automatic differentiation (`torch.autograd.forward_ad`). We computed the exact weight tangent `dW = -outer(u, u @ W0)` in `fp32`, cast the tangent to `bfloat16`, and pushed it through a single `r = 32` prefill pass per problem (96 rows across `core_block.0` and `prelude.0` on the same 48 blind problems, 156.0 seconds total on the RX 7800 XT, allocator peak 9.313 GiB; `rocm-smi` process peak 10.588 GiB), recording `log2(||ds_t|| / ||s_t||)` at `t = 4, 8, 16, 32`.
+
+In the `alpha -> 0` tangent limit, `core_block.0`'s relative hidden-state perturbation from step 4 to steps 8, 16 and 32 did not grow by `+0.6674`, `+1.0961` and `+1.2592`. It shrank by `-0.2932`, `-0.2181` and `-0.3709` log2 units (IQR `[-0.3867, -0.0879]` at `t = 8`, `[-0.4332, -0.0498]` at `t = 16`, and `[-0.6209, -0.2010]` at `t = 32`, with all 48 problems producing nonzero tangents). Because the geometric forecast `-F(r)` is positive for every `mu > 0`, no scalar contraction estimate can change that sign: along `v_loop`, the recurrent Jacobian damps the injected tangent faster than the state norm grows. Meanwhile, `prelude.0`—now free of `bfloat16` weight-subtraction rounding—showed a positive tangent gain of `+0.2997`, `+0.3938` and `+0.5198` log2 units at steps 8, 16 and 32 via repeated `adapter` re-injection, still short of the `+0.6296` half-forecast cutoff.
+
+Scope note for both Huginn runs: all numbers are limited to `tomg-group-umd/huginn-0125` (`bfloat16` weights and tangents, greedy decoding, `test_time_noise = 0`), the single direction vector `v_loop_huginn.pt`, `mlp.proj.weight` at `core_block.0`, `prelude.0` and `coda.0`, loop depths `r` in `{4, 8, 16, 32}`, the first 32 generated tokens on 50 calibration and 48 blind GSM8K/SVAMP problems for the ladder run, and prefill last-token tangents normalized by `||s_t||` for the JVP run; the ladder flip criterion is first token divergence rather than final math accuracy.
+
 ## Four rules we're adopting
 
 None of these is new. All four would have changed what got reported, on their side and on ours.
@@ -129,6 +195,6 @@ The two sides should differ only in the property you claim to target. The agent'
 
 ## What we'd run next
 
-The test that matters is the original setting. Qwen3.5-0.8B in thinking mode at 32,768 tokens loops on its own, and the authors' edit is public. The readout we want is the cap share and the graded repeated-4-gram share of the generated tokens, before and after. Put them next to a random edit of equal size and the non-thinking zero-edit baseline. Our TinyLlama prompts only loop because we built them to, so the next model has to be one that loops without help. On TinyLlama itself, the cheap next step is sampling: the cuts do move the loop prompts' next-token distributions, and greedy decoding hides that.
+The test that still matters is the original Qwen setting. Qwen3.5-0.8B in thinking mode at 32,768 tokens loops on its own, and the authors' edit is public. The readout we want is the cap share and the graded repeated-4-gram share of the generated tokens, before and after, next to a random edit of equal size and the non-thinking zero-edit baseline. On TinyLlama-1.1B and Huginn-0125 (3.5B), single-direction rank-one projections moved hidden states without rescuing greedy rollouts—and on Huginn's shared recurrent core, neither finite-strength weight edits nor exact `alpha -> 0` forward-mode JVP tangents compounded across 32 recurrent steps. On TinyLlama itself, the cheap next step is sampling: the cuts do move the loop prompts' next-token distributions, and greedy decoding hides that.
 
 If you came here from our earlier posts on [the Adam epsilon wall](/blog/adam-epsilon-wall-and-replay/) and [flat directions where the data is absent](/blog/flat-where-the-data-isnt/), this is the same exercise on a different number. If you run the Qwen version, we'd like to see the cap shares.
