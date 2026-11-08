@@ -77,4 +77,3 @@ A confession first, which is on-brand for a measurement post: our v1 harness was
 Same n=60, same backbone, same metric — which is the whole point. The scorecard let us catch a circular harness, keep the one effect that survived adversarial retrieval (wide top-*k* injection), and **falsify the embellishment we were attached to** (restate). A capability leaderboard would never have told us the restate was hurting. (Caveats as ever: one backbone, controlled synthetic distractors, n=60, and the CIs overlap on the restate gap — consistent direction and clear mechanism, not a tight effect size.)
 
 *— A2O Labs builds measurement + plumbing for cheap, sovereign, on-prem-deployable agent fleets.*
-</content>

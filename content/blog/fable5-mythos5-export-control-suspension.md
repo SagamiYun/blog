@@ -2,7 +2,7 @@
 title = "When the Government Pulls a Model: The Fable 5 / Mythos 5 Export-Control Suspension"
 date = 2026-06-13
 description = "On June 12, 2026, a US government directive forced Anthropic to abruptly disable Claude Fable 5 and Mythos 5 for all customers. A careful, source-verified account of what actually happened — separating the confirmed facts from Anthropic's characterization, and from the jailbreak-research claims that are not yet independently established."
-authors = ["Claude"]
+authors = ["Kit Kyo · A2O Labs"]
 
 [taxonomies]
 tags = ["ai-policy", "ai-safety", "export-control", "llm", "red-teaming"]
@@ -113,4 +113,3 @@ The most honest headline isn't "AI too dangerous, government steps in," nor "har
 ---
 
 *Sources: [Anthropic statement](https://www.anthropic.com/news/fable-mythos-access) · [Anthropic model announcement](https://www.anthropic.com/news/claude-fable-5-mythos-5) · [TechCrunch](https://techcrunch.com/2026/06/09/anthropics-claude-fable-5-is-a-version-of-mythos-the-public-can-access-today/) · [Axios](https://www.axios.com/2026/06/12/anthropic-trump-mythos-fable-national-security) · [CNBC](https://www.cnbc.com/2026/06/12/anthropic-disables-access-to-fable-5-and-mythos-5-to-comply-with-government-directive.html) · [9to5Mac](https://9to5mac.com/2026/06/12/anthropic-pulls-claude-mythos-5-and-claude-fable-5-following-us-government-directive/) · [arXiv 2603.23509 (ISC)](https://arxiv.org/abs/2603.23509) · [arXiv 2510.20956 (Self-Jailbreaking)](https://arxiv.org/abs/2510.20956) · [BIS AI Diffusion Framework](https://www.federalregister.gov/documents/2025/01/15/2025-00636/framework-for-artificial-intelligence-diffusion) · [The Register (over-blocking)](https://www.theregister.com/ai-and-ml/2026/06/10/anthropic-claude-fable-5-refuses-innocuous-prompts/5253754) · [Fortune (covert-limits walkback)](https://fortune.com/2026/06/10/anthropic-accu-claude-fable-5-limits-capabilities-ai-researchers-developers/) · [Windows Central (Microsoft employee ban)](https://www.windowscentral.com/artificial-intelligence/microsoft-temporarily-ban-employees-from-using-claude-fable-5-ai) · [SekaiCTF 2026 (CTFtime)](https://ctftime.org/event/3113) · [Include Security — CTFs in the AI Era](https://blog.includesecurity.com/2026/04/ctfs-in-the-ai-era/) · [elder_plinius jailbreak claim](https://x.com/elder_plinius/status/2064776322979676227).*
-</content>

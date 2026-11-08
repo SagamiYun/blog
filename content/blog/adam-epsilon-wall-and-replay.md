@@ -75,11 +75,11 @@ you get a closed-form estimate of where the wall sits:
 
 $$s^\ast \approx \frac{\log(1/\epsilon) - \log V}{\log(VD)} + \delta$$
 
-Here V is the size of the matrix, D its rank, and δ a lag: the overall error only crosses the
+Here $V$ is the size of the matrix, $D$ its rank, and $\delta$ a lag: the overall error only crosses the
 failure line after the error in the rarest direction has grown big enough to dominate it.
 
-The test that convinced me: δ was fitted once, on four small configurations, and then frozen.
-On a registered 16-cell grid of larger problems (V from 64 to 512, rank from 4 to 32), the
+The test that convinced me: $\delta$ was fitted once, on four small configurations, and then frozen.
+On a registered 16-cell grid of larger problems ($V$ from 64 to 512, rank from 4 to 32), the
 predicted wall landed within 0.45 of the observed one in all 16 cells, and within 0.15 in 9 of
 them. Doubling the rank, or doubling the size, shifted the wall by the predicted amount
 (within 0.35) in 12 of 12 pairs each.
@@ -97,14 +97,14 @@ Shampoo, which you might expect to beat diagonal Adam, walls *earlier*, at
 $s^\ast \approx 0.44$, because its inverse-fourth-root preconditioner amplifies the floor noise
 by $\epsilon^{-1/4} = 100$.
 
-Second, the practical one: **you can't buy your way past the wall with a smaller ε.** Down to
-10⁻⁸, ε really is the lever: going from 10⁻⁴ to 10⁻⁸ pushes the wall out by 2.58 and 1.96 units
+Second, the practical one ([now out as a companion paper, arXiv:2611.01868](https://arxiv.org/abs/2611.01868)): **you can't buy your way past the wall with a smaller $\varepsilon$.** Down to
+$10^{-8}$, $\varepsilon$ really is the lever: going from $10^{-4}$ to $10^{-8}$ pushes the wall out by 2.58 and 1.96 units
 of skew in the two configurations tested, where the formula says 2.21 and 2.66. Right size, not
-right to the decimal. But four more decades, down to 10⁻¹², move it by less than a tenth of a
+right to the decimal. But four more decades, down to $10^{-12}$, move it by less than a tenth of a
 unit. Adam generates its own floor: fast modes oscillating at the edge of stability leak
-gradient into the rare ones, which works out to an effective floor of about 4.8 × 10⁻⁹ at a
-learning rate of 10⁻². The default 10⁻⁸ sits right at the knee where the hyperparameter hands
-control over to Adam's own dynamics.
+gradient into the rare ones, which works out to an effective floor of about $4.8 \times 10^{-9}$ at a
+learning rate of $10^{-2}$. The default $10^{-8}$ sits right at the knee where the hyperparameter hands
+control over to Adam's own dynamics (see also our follow-up field guide on [breaking precision walls in first-, second-, and zeroth-order optimizers](/blog/breaking-precision-walls-field-guide/)).
 
 What it doesn't show, by its own account: the formula fails at rank 2, where the wall comes about
 one unit later than predicted. The grid tests Adam at one ε and one learning rate. And the

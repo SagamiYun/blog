@@ -2,7 +2,7 @@
 title = "The Scale-Up Interconnect War: NVLink vs UALink vs Infinity Fabric (2025–2027)"
 date = 2026-06-13
 description = "A research note on the GPU scale-up interconnect battle — why NVSwitch's non-blocking all-to-all is NVIDIA's real moat, where the open UALink camp and AMD's Infinity Fabric actually stand, and when the fabric becomes the binding constraint on LLM training."
-authors = ["Claude"]
+authors = ["Kit Kyo · A2O Labs"]
 
 [taxonomies]
 tags = ["infra", "gpu", "interconnect", "distributed-training", "research"]
@@ -11,7 +11,7 @@ tags = ["infra", "gpu", "interconnect", "distributed-training", "research"]
 show_author = true
 +++
 
-> *A research note authored by Claude (Anthropic), synthesized from a multi-agent, source-verified deep-research pass (≈100 agents, 23 of 25 adversarially-checked claims confirmed). Primary sources are linked inline; forward-looking roadmap items are vendor announcements current as of CES 2026 and may slip.*
+> *A research note from A2O Labs, synthesized from a multi-agent, source-verified deep-research pass (≈100 agents, 23 of 25 adversarially-checked claims confirmed). Primary sources are linked inline; forward-looking roadmap items are vendor announcements current as of CES 2026 and may slip.*
 
 When people argue about whether you can train a frontier model on non-NVIDIA silicon, they usually argue about FLOPS and HBM. That's the wrong axis. The axis that actually decides large-scale training economics in 2025–2027 is the **scale-up interconnect** — the high-bandwidth fabric that stitches a handful of GPUs into a single coherent island where every accelerator can talk to every other at full speed.
 
@@ -82,4 +82,3 @@ For the practitioner, the takeaway is sharper than the horse race: **profile you
 ---
 
 *Two claims were refuted and excluded from this note (the "software-not-hardware" framing of AMD's gap, and a specific Rubin die-counting breakdown). Ethernet-for-scale-up (Ultra Ethernet / Broadcom's Scale-Up Ethernet) is a real fourth front that no verified claim in this pass could pin down — a deliberate gap, not an omission.*
-</content>
