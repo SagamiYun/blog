@@ -185,7 +185,7 @@ And one negative result that I got wrong first. I reported that the float32 and 
 readouts give mismatch rates differing by about 8%. They do not differ. The sign flips
 between the two thresholds, and comparing each row's own interval by overlap is both the
 wrong test and a conservative one, because the two readouts are evaluated on the same
-tokens. The paired bootstrap puts the difference at `+0.001` and `−0.0006` with intervals
+tokens. The paired bootstrap puts the difference at +0.001 and `−0.0006` with intervals
 containing zero at both thresholds. What *is* solid is that the readout precision changes
 *which step* the rule stops at on a quarter to a third of tokens, by as many as
 twenty-three steps, while leaving the aggregate outcome unresolvably unchanged. The
@@ -245,7 +245,7 @@ correctly?
 It does not, and the interesting part is what it took to be allowed to say "does not"
 rather than "cannot tell".
 
-The correlation is `+0.15` on the in-distribution task and `+0.02` out of distribution,
+The correlation is +0.15 on the in-distribution task and +0.02 out of distribution,
 both with 95% intervals containing zero. That is the registered outcome — the pre-
 registration named "this diagnostic is not a useful instrument on this model" as one of
 three possible results in advance, so it is a result rather than a failure.
@@ -273,7 +273,7 @@ out-of-distribution margin is thin enough that it should be quoted alongside the
 rather than summarised as "passed".
 
 The second guard is the length gate above, and it voided something else I would otherwise
-have written. The same diagnostic at the *first* step correlates with correctness at `+0.27`, which looks like a real signal
+have written. The same diagnostic at the *first* step correlates with correctness at +0.27, which looks like a real signal
 until you notice it correlates with prompt length at `−0.95`. It is very nearly a function
 of how long the question is, which is why the first-step number is reported as a baseline
 value and never as an effect. The depth used for the headline was frozen before any of this

@@ -352,7 +352,7 @@ We committed forecasts for this rule and tested it in advance on two larger unse
       <div class="tk-scrubber">
         <label style="display:flex; align-items:center; gap:6px; flex:1; min-width:190px;">
           <span style="color:var(--tk-muted);">STEP A = (η/c)h_max</span>
-          <input id="s2-slider-a" type="range" min="100" max="3000" step="10" value="360" style="flex:1; accent-color:var(--tk-acid);">
+          <input id="s2-slider-a" type="range" min="100" max="3000" step="5" value="360" style="flex:1; accent-color:var(--tk-acid);">
           <b id="s2-val-a" style="color:var(--tk-acid); min-width:42px;">36</b>
         </label>
         <div style="display:flex; align-items:center; gap:4px; flex-wrap:wrap;">
@@ -637,7 +637,7 @@ Read across all three papers ([Part I](https://arxiv.org/abs/2610.40485), [Part 
     const a2 = document.getElementById('s2-slider-a');
     if (b1) b1.step = on ? '1' : '5';
     if (p1) p1.step = on ? '1' : '5';
-    if (a2) a2.step = on ? '1' : '10';
+    if (a2) a2.step = on ? '1' : '5';
   }
   window.addEventListener('keydown', (e) => { if (e.key === 'Shift') setFineMode(true); });
   window.addEventListener('keyup', (e) => { if (e.key === 'Shift') setFineMode(false); });
@@ -658,6 +658,7 @@ Read across all three papers ([Part I](https://arxiv.org/abs/2610.40485), [Part 
 
     let mode1 = '14x5';
     let lagStep = 0;
+    let sMax1 = 6;
 
     const LAG_STEPS = [
       { name: '0. Raw ln(20) law (32 walls)', meanGap: '-0.1494', rms: '0.1561', shampooRms: '0.1637', adamRms: '0.1481 (max 0.1915)', maxGap: '0.2155 (min 0.0562)', shift: 0 },
@@ -733,10 +734,11 @@ Read across all three papers ([Part I](https://arxiv.org/abs/2610.40485), [Part 
       } else {
         const st = LAG_STEPS[lagStep];
         shapeTag.textContent = 'Lag Step ' + lagStep + '/4';
-        sMeas = 3.53;
-        sPred = 3.53 + 0.1494 + st.shift;
+        sMeas = 3.53 + 0.8653 * prog;
+        sPred = sMeas + 0.1494 + st.shift;
         tapeRows.innerHTML =
           '<div style="color:var(--tk-amber);font-weight:700;">' + st.name + '</div>' +
+          '<div style="display:flex;justify-content:space-between;"><span>Budget shift (measured (14,5) lift)</span><b style="color:var(--tk-green);">+' + (0.8653 * prog).toFixed(4) + '</b></div>' +
           '<div style="display:flex;justify-content:space-between;"><span>32-Wall Mean Gap</span><b>' + st.meanGap + '</b></div>' +
           '<div style="display:flex;justify-content:space-between;"><span>32-Wall RMS Gap</span><b style="color:var(--tk-acid);">' + st.rms + '</b></div>' +
           '<div style="display:flex;justify-content:space-between;"><span>Shampoo Split</span><b>' + st.shampooRms + '</b></div>' +
@@ -746,17 +748,18 @@ Read across all three papers ([Part I](https://arxiv.org/abs/2610.40485), [Part 
 
       wMeasEl.textContent = sMeas.toFixed(4);
       wPredEl.textContent = sPred.toFixed(4);
+      sMax1 = Math.max(6, Math.ceil(Math.max(sMeas, sPred) + 0.25));
 
       const W = c1.width, H = c1.height;
       ctx1.clearRect(0, 0, W, H);
       const padL = 48, padR = 20, padT = 22, padB = 30;
       const plotW = W - padL - padR, plotH = H - padT - padB;
-      const xOfS = (s) => padL + (s / 6) * plotW;
+      const xOfS = (s) => padL + (s / sMax1) * plotW;
       const yOfE = (e) => padT + (1 - Math.min(1, Math.max(0, e))) * plotH;
 
       ctx1.strokeStyle = '#232327';
       ctx1.lineWidth = 1;
-      for (let s = 0; s <= 6; s += 1) {
+      for (let s = 0; s <= sMax1; s += 1) {
         const x = xOfS(s);
         ctx1.beginPath(); ctx1.moveTo(x, padT); ctx1.lineTo(x, padT + plotH); ctx1.stroke();
         ctx1.fillStyle = '#7d8193';
@@ -778,7 +781,7 @@ Read across all three papers ([Part I](https://arxiv.org/abs/2610.40485), [Part 
       ctx1.setLineDash([3, 3]);
       ctx1.beginPath();
       for (let i = 0; i <= 120; i++) {
-        const s = (i / 120) * 6;
+        const s = (i / 120) * sMax1;
         const avgL = (1 / 125) * Math.exp(-s / 4);
         const x = xOfS(s), y = yOfE(avgL);
         if (i === 0) ctx1.moveTo(x, y); else ctx1.lineTo(x, y);
@@ -792,7 +795,7 @@ Read across all three papers ([Part I](https://arxiv.org/abs/2610.40485), [Part 
       ctx1.setLineDash([6, 4]);
       ctx1.beginPath();
       for (let i = 0; i <= 160; i++) {
-        const s = (i / 160) * 6;
+        const s = (i / 160) * sMax1;
         const rate = Math.log(20) * Math.pow(9 / 2, sPred - s);
         const eVal = Math.min(1, Math.exp(-rate));
         const x = xOfS(s), y = yOfE(eVal);
@@ -806,7 +809,7 @@ Read across all three papers ([Part I](https://arxiv.org/abs/2610.40485), [Part 
       ctx1.lineWidth = 2;
       ctx1.beginPath();
       for (let i = 0; i <= 160; i++) {
-        const s = (i / 160) * 6;
+        const s = (i / 160) * sMax1;
         const rate = Math.log(20) * Math.pow(9 / 2, sMeas - s);
         const eVal = Math.min(1, Math.exp(-rate));
         const x = xOfS(s), y = yOfE(eVal);
@@ -833,7 +836,7 @@ Read across all three papers ([Part I](https://arxiv.org/abs/2610.40485), [Part 
     c1.addEventListener('pointermove', (e) => {
       if (e.buttons === 1) {
         const rect = c1.getBoundingClientRect();
-        const s = Math.max(1 / 2, Math.min(11 / 2, ((e.clientX - rect.left - 48) / (rect.width - 68)) * 6));
+        const s = Math.max(1 / 2, Math.min(11 / 2, ((e.clientX - rect.left - 48) / (rect.width - 68)) * sMax1));
         sprobeEl.value = Math.round(s * 100);
         render1();
       }

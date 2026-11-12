@@ -26,7 +26,7 @@ A model that conflates the two axes fails the storm (rejects a valid token, fool
 
 ## The fix: a continuous-time memory, in stdlib
 
-The fix isn't a bigger model or fine-tuning. It's an external store that decays each tracked state's validity on **real elapsed time** — `validity = exp(−Δt / τ)`, where Δt is read from the timestamps and τ is the token's TTL — and injects that readout into the prompt. No parameters, no GPU, sub-millisecond. We ship it as [`ltm_sidecar.py`](https://github.com/a2o-labs/dt-stale/blob/main/ltm_sidecar.py): a zero-dependency proxy you drop in front of Ollama. Send a normal request with a `temporal` block, and it computes the decay and injects it for you.
+The fix isn't a bigger model or fine-tuning. It's an external store that decays each tracked state's validity on **real elapsed time** — $\mathrm{validity} = \exp(-\Delta t / \tau)$, where Δt is read from the timestamps and τ is the token's TTL — and injects that readout into the prompt. No parameters, no GPU, sub-millisecond. We ship it as [`ltm_sidecar.py`](https://github.com/a2o-labs/dt-stale/blob/main/ltm_sidecar.py): a zero-dependency proxy you drop in front of Ollama. Send a normal request with a `temporal` block, and it computes the decay and injects it for you.
 
 Two ablations make sure the *physical-time* signal is what's doing the work, not just "having a memory":
 - Swap real Δt for a **token-step** decay (same mechanism, wrong axis) and the rescued models collapse — often *below* their bare score.
