@@ -1,5 +1,5 @@
 +++
-title = "Sixteen clauses at t = 0: why BF16 and W_unembed eat Constitutional AI"
+title = "Sixteen Clauses at t = 0: Why Constitutional Wrappers Fail as Physics"
 description = "Anthropic's Constitutional AI leans on sixteen English clauses at `W_unembed` and a system-prompt preamble at `t = 0`. Trace the forward pass and three things break: character bijections and split tool calls step past the lexical EFT cutoff, `BF16` mantissa truncation zeroes a `0.9995`-gated `t = 0` state residual by token 16,384 (`fl_bf16(1.0 + 2.76e-4) == 1.0`), and sixteen imperfect rubric judges turn an 8% per-clause false-positive rate into a 73.7% tax on benign edge work. Safety invariants belong in the transition operator, not in English prose."
 date = 2026-11-17
 authors = ["Kit Kyo · A2O Labs"]
